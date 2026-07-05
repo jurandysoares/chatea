@@ -3,6 +3,7 @@
 from environs import Env
 import requests
 import typer
+import yaml
 
 app = typer.Typer()
 
@@ -35,6 +36,11 @@ def get_user(username: str):
     response = requests.get(url, headers=AUTH_HEADERS)
     response.raise_for_status()
     return response.json()
+
+@app.command()
+def user_info(username: str):
+    user_details = get_user(username)
+    typer.echo(yaml.dump(user_details))
 
 @app.command()
 def members(org: str,# = typer.Option(..., help="Gitea organization name"),
